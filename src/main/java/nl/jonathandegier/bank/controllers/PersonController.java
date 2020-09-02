@@ -22,8 +22,10 @@ public class PersonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Person>> getAccounts() {
-        return ResponseEntity.ok(service.getPersons());
+    public ResponseEntity<List<Person>> getAccounts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "perPage", defaultValue = "5") int perPage) {
+        int fromIndex = page * perPage;
+        int toIndex = (page + 1) * perPage;
+        return ResponseEntity.ok(service.getPersons().subList(fromIndex, toIndex));
     }
 
     @GetMapping("{id}")

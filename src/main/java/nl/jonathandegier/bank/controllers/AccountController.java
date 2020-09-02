@@ -22,8 +22,10 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Account>> getAccounts() {
-        return ResponseEntity.ok(service.getAccounts());
+    public ResponseEntity<List<Account>> getAccounts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "perPage", defaultValue = "5") int perPage) {
+        int fromIndex = page * perPage;
+        int toIndex = (page + 1) * perPage;
+        return ResponseEntity.ok(service.getAccounts().subList(fromIndex, toIndex));
     }
 
     @GetMapping("{id}")

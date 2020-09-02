@@ -1,10 +1,11 @@
 package nl.jonathandegier.bank.controllers.dtos;
 
-import javax.validation.constraints.Min;
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotNull;
 
 public class CreateAccountDTO {
-    @Min(value = 10000, message = "IBAN to short")
+    @Length(min = 5, message = "IBAN to short")
     @NotNull
     public String iban;
 }
