@@ -1,8 +1,8 @@
 package nl.jonathandegier.bank.controllers;
 
 import nl.jonathandegier.bank.controllers.dtos.CreatePersonDTO;
-import nl.jonathandegier.bank.domain.Account;
-import nl.jonathandegier.bank.domain.Person;
+import nl.jonathandegier.bank.controllers.dtos.PersonDTO;
+import nl.jonathandegier.bank.controllers.mappers.PersonMapper;
 import nl.jonathandegier.bank.services.PersonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,55 +10,60 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("persons")
 public class PersonController {
 
     private final PersonService service;
+    private final PersonMapper mapper;
 
-    public PersonController(PersonService service) {
+    public PersonController(PersonService service, PersonMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<Person>> getAccounts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "perPage", defaultValue = "5") int perPage) {
+    public ResponseEntity<List<PersonDTO>> getPersons(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "perPage", defaultValue = "5") int perPage) {
         int fromIndex = page * perPage;
         int toIndex = (page + 1) * perPage;
-        return ResponseEntity.ok(service.getPersons().subList(fromIndex, toIndex));
+
+        return ResponseEntity.ok(
+                service.getPersons()
+                        .stream()
+                        .map(mapper::toDto)
+                        .collect(Collectors.toList()
+                        ).subList(fromIndex, toIndex)
+        );
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Person> getAccount(@PathVariable long id) {
-        return ResponseEntity.ok(service.getPerson(id));
+    public ResponseEntity<PersonDTO> getPerson(@PathVariable long id) {
+        return ResponseEntity.ok(mapper.toDto(service.getPerson(id)));
     }
 
     @PostMapping
-    public ResponseEntity<Person> createAccount(@Valid @RequestBody CreatePersonDTO dto) {
-        Person account = service.createPerson(dto.name, dto.surname);
-        return ResponseEntity.created(URI.create("/" + account.getId())).body(account);
+    public ResponseEntity<PersonDTO> createPerson(@Valid @RequestBody CreatePersonDTO dto) {
+        PersonDTO account = mapper.toDto(service.createPerson(dto.name, dto.surname));
+        return ResponseEntity.created(URI.create("/" + account.id)).body(account);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteAccount(@PathVariable long id) {
+    public ResponseEntity deletePerson(@PathVariable long id) {
         service.deletePerson(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("{id}/accounts")
-    public ResponseEntity<List<Account>> getAccountHolders(@PathVariable long id) {
-        return ResponseEntity.ok(service.getAccounts(id));
-    }
-
     @PostMapping("{personId}/{accountId}")
-    public ResponseEntity<Person> addAccountHolder(@PathVariable long personId, @PathVariable long accountId) {
+    public ResponseEntity<PersonDTO> addAccount(@PathVariable long personId, @PathVariable long accountId) {
         service.addAccount(accountId, personId);
-        return ResponseEntity.ok(service.getPerson(accountId));
+        return ResponseEntity.ok(mapper.toDto(service.getPerson(accountId)));
     }
 
     @DeleteMapping("{personId}/{accountId}")
-    public ResponseEntity<Person> removeAccountHolder(@PathVariable long personId, @PathVariable long accountId) {
+    public ResponseEntity<PersonDTO> removeAccount(@PathVariable long personId, @PathVariable long accountId) {
         service.removeAccount(accountId, personId);
-        return ResponseEntity.ok(service.getPerson(accountId));
+        return ResponseEntity.ok(mapper.toDto(service.getPerson(accountId)));
     }
 }
