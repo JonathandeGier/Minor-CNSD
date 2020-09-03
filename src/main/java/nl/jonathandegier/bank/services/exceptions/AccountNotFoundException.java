@@ -1,4 +1,4 @@
-package nl.jonathandegier.bank.repositories.exceptions;
+package nl.jonathandegier.bank.services.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

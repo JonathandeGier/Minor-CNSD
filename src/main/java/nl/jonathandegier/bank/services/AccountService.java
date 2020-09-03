@@ -1,22 +1,22 @@
 package nl.jonathandegier.bank.services;
 
 import nl.jonathandegier.bank.domain.Account;
-import nl.jonathandegier.bank.domain.Person;
 import nl.jonathandegier.bank.repositories.AccountRepository;
-import nl.jonathandegier.bank.repositories.PersonRepository;
+import nl.jonathandegier.bank.services.exceptions.AccountNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional
 public class AccountService {
 
     private final AccountRepository repository;
-    private final PersonRepository personRepository;
 
-    public AccountService(AccountRepository repository, PersonRepository personRepository) {
+    public AccountService(AccountRepository repository) {
         this.repository = repository;
-        this.personRepository = personRepository;
 
         createAccount("12345");
         createAccount("23456");
@@ -31,45 +31,30 @@ public class AccountService {
     }
 
     public List<Account> getAccounts() {
-        return repository.getAllAccounts();
+        return repository.findAll();
     }
 
     public Account getAccount(long id) {
-        return repository.getAccount(id);
+        Optional<Account> account = repository.findById(id);
+        if (account.isEmpty()) {
+            throw new AccountNotFoundException();
+        }
+
+        return account.get();
     }
 
     public Account createAccount(String iban) {
-        long id = repository.getNextId();
-        Account account = new Account(id, iban);
-
-        repository.storeAccount(account);
-        return account;
+        Account account = new Account(iban);
+        return repository.save(account);
     }
 
     public void blockAccount(long id) {
-        getAccount(id).block();
+        Account account = getAccount(id);
+        account.block();
+        repository.save(account);
     }
 
     public void deleteAccount(long id) {
-        repository.getAccount(id); // so it generates a 404 response if the account does not exist
-        repository.deleteAccount(id);
-    }
-
-    public List<Person> getAccountHolders(long id) {
-        return repository.getAccount(id).getAccountHolders();
-    }
-
-    public void addAccountHolder(long accountId, long personId) {
-        Account account = repository.getAccount(accountId);
-        Person person = personRepository.getPerson(personId);
-        account.addAccountHolder(person);
-        person.addAccount(account);
-    }
-
-    public void removeAccountHolder(long accountId, long personId) {
-        Account account = repository.getAccount(accountId);
-        Person person = personRepository.getPerson(personId);
-        account.removeAccountHolder(person);
-        person.removeAccount(account);
+        repository.delete(getAccount(id));
     }
 }

@@ -1,25 +1,33 @@
 package nl.jonathandegier.bank.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@Entity
 public class Person {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "surname", nullable = false)
     private String surname;
 
-    @JsonIgnore
-    private List<Account> accounts;
+    @ManyToMany
+    private Set<Account> accounts;
 
-    public Person(long id, String name, String surname) {
-        this.id = id;
+    public Person() {}
+    public Person(String name, String surname) {
         this.name = name;
         this.surname = surname;
 
-        this.accounts = new ArrayList<>();
+        this.accounts = new HashSet<>();
     }
 
     public long getId() {
@@ -43,7 +51,7 @@ public class Person {
     }
 
     public List<Account> getAccounts() {
-        return this.accounts;
+        return new ArrayList<>(this.accounts);
     }
 
     @Override

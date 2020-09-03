@@ -3,6 +3,7 @@ package nl.jonathandegier.bank.controllers;
 import nl.jonathandegier.bank.controllers.dtos.CreatePersonDTO;
 import nl.jonathandegier.bank.controllers.dtos.PersonDTO;
 import nl.jonathandegier.bank.controllers.mappers.PersonMapper;
+import nl.jonathandegier.bank.services.AccountHolderService;
 import nl.jonathandegier.bank.services.PersonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class PersonController {
 
     private final PersonService service;
+    private final AccountHolderService accountHolderService;
     private final PersonMapper mapper;
 
-    public PersonController(PersonService service, PersonMapper mapper) {
+    public PersonController(PersonService service, AccountHolderService accountHolderService, PersonMapper mapper) {
         this.service = service;
+        this.accountHolderService = accountHolderService;
         this.mapper = mapper;
     }
 
@@ -57,13 +60,13 @@ public class PersonController {
 
     @PostMapping("{personId}/{accountId}")
     public ResponseEntity<PersonDTO> addAccount(@PathVariable long personId, @PathVariable long accountId) {
-        service.addAccount(accountId, personId);
+        accountHolderService.addAccountHolder(accountId, personId);
         return ResponseEntity.ok(mapper.toDto(service.getPerson(accountId)));
     }
 
     @DeleteMapping("{personId}/{accountId}")
     public ResponseEntity<PersonDTO> removeAccount(@PathVariable long personId, @PathVariable long accountId) {
-        service.removeAccount(accountId, personId);
+        accountHolderService.removeAccountHolder(accountId, personId);
         return ResponseEntity.ok(mapper.toDto(service.getPerson(accountId)));
     }
 }

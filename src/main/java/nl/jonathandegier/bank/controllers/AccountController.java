@@ -3,6 +3,7 @@ package nl.jonathandegier.bank.controllers;
 import nl.jonathandegier.bank.controllers.dtos.AccountDTO;
 import nl.jonathandegier.bank.controllers.dtos.CreateAccountDTO;
 import nl.jonathandegier.bank.controllers.mappers.AccountMapper;
+import nl.jonathandegier.bank.services.AccountHolderService;
 import nl.jonathandegier.bank.services.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,26 +18,38 @@ import java.util.stream.Collectors;
 public class AccountController {
 
     private final AccountService service;
+    private final AccountHolderService accountHolderService;
     private final AccountMapper mapper;
 
-    public AccountController(AccountService service, AccountMapper mapper) {
+    public AccountController(AccountService service, AccountHolderService accountHolderService, AccountMapper mapper) {
         this.service = service;
+        this.accountHolderService = accountHolderService;
         this.mapper = mapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<AccountDTO>> getAccounts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "perPage", defaultValue = "5") int perPage) {
-        int fromIndex = page * perPage;
-        int toIndex = (page + 1) * perPage;
-
+    public ResponseEntity<List<AccountDTO>> getAccounts() {
         return ResponseEntity.ok(
             service.getAccounts()
                 .stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList()
-            ).subList(fromIndex, toIndex)
-        );
+        ));
     }
+
+//    @GetMapping
+//    public ResponseEntity<List<AccountDTO>> getPagedAccounts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "perPage", defaultValue = "5") int perPage) {
+//        int fromIndex = page * perPage;
+//        int toIndex = (page + 1) * perPage;
+//
+//        return ResponseEntity.ok(
+//                service.getAccounts()
+//                        .stream()
+//                        .map(mapper::toDto)
+//                        .collect(Collectors.toList()
+//                        ).subList(fromIndex, toIndex)
+//        );
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<AccountDTO> getAccount(@PathVariable long id) {
@@ -63,13 +76,13 @@ public class AccountController {
 
     @PostMapping("{accountId}/{personId}")
     public ResponseEntity<AccountDTO> addAccountHolder(@PathVariable long accountId, @PathVariable long personId) {
-        service.addAccountHolder(accountId, personId);
+        accountHolderService.addAccountHolder(accountId, personId);
         return ResponseEntity.ok(mapper.toDto(service.getAccount(accountId)));
     }
 
     @DeleteMapping("{accountId}/{personId}")
     public ResponseEntity<AccountDTO> removeAccountHolder(@PathVariable long accountId, @PathVariable long personId) {
-        service.removeAccountHolder(accountId, personId);
+        accountHolderService.removeAccountHolder(accountId, personId);
         return ResponseEntity.ok(mapper.toDto(service.getAccount(accountId)));
     }
 }
