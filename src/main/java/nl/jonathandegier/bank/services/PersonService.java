@@ -17,10 +17,6 @@ public class PersonService {
 
     public PersonService(PersonRepository repository) {
         this.repository = repository;
-
-        createPerson("Elon", "Musk");
-        createPerson("Bill", "Gates");
-        createPerson("Jeff", "Bezos");
     }
 
     public List<Person> getPersons() {

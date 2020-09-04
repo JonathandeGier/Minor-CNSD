@@ -28,18 +28,29 @@ public class PersonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PersonDTO>> getPersons(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "perPage", defaultValue = "5") int perPage) {
-        int fromIndex = page * perPage;
-        int toIndex = (page + 1) * perPage;
-
+    public ResponseEntity<List<PersonDTO>> getPersons() {
         return ResponseEntity.ok(
-                service.getPersons()
-                        .stream()
-                        .map(mapper::toDto)
-                        .collect(Collectors.toList()
-                        ).subList(fromIndex, toIndex)
+            service.getPersons()
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList()
+            )
         );
     }
+
+//    @GetMapping
+//    public ResponseEntity<List<PersonDTO>> getPersons(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "perPage", defaultValue = "5") int perPage) {
+//        int fromIndex = page * perPage;
+//        int toIndex = (page + 1) * perPage;
+//
+//        return ResponseEntity.ok(
+//                service.getPersons()
+//                        .stream()
+//                        .map(mapper::toDto)
+//                        .collect(Collectors.toList()
+//                        ).subList(fromIndex, toIndex)
+//        );
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<PersonDTO> getPerson(@PathVariable long id) {

@@ -17,17 +17,6 @@ public class AccountService {
 
     public AccountService(AccountRepository repository) {
         this.repository = repository;
-
-        createAccount("12345");
-        createAccount("23456");
-        createAccount("34567");
-        createAccount("45678");
-        createAccount("56789");
-        createAccount("67890");
-        createAccount("78901");
-        createAccount("89012");
-        createAccount("90123");
-        createAccount("01234");
     }
 
     public List<Account> getAccounts() {
