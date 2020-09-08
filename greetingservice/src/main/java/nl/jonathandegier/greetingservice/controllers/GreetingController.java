@@ -17,7 +17,7 @@ public class GreetingController {
     }
 
     @GetMapping
-//    @HystrixCommand(fallbackMethod = "greetFallback")
+    @HystrixCommand(fallbackMethod = "greetFallback")
     public String greet() {
         return service.greet();
     }
