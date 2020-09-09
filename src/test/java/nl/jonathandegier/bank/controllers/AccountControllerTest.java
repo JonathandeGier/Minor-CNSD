@@ -3,7 +3,6 @@ package nl.jonathandegier.bank.controllers;
 import nl.jonathandegier.bank.controllers.dtos.AccountDTO;
 import nl.jonathandegier.bank.controllers.mappers.AccountMapper;
 import nl.jonathandegier.bank.domain.Account;
-import nl.jonathandegier.bank.domain.AccountStatus;
 import nl.jonathandegier.bank.services.AccountHolderService;
 import nl.jonathandegier.bank.services.AccountService;
 import org.junit.jupiter.api.BeforeEach;
