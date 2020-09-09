@@ -37,10 +37,12 @@ public class AccountService {
         return repository.save(account);
     }
 
-    public void blockAccount(long id) {
+    public Account blockAccount(long id) {
         Account account = getAccount(id);
         account.block();
         repository.save(account);
+
+        return account;
     }
 
     public void deleteAccount(long id) {

@@ -64,8 +64,7 @@ public class AccountController {
 
     @PutMapping("{id}/block")
     public ResponseEntity<AccountDTO> blockAccount(@PathVariable long id) {
-        service.blockAccount(id);
-        return ResponseEntity.ok(mapper.toDto(service.getAccount(id)));
+        return ResponseEntity.ok(mapper.toDto(service.blockAccount(id)));
     }
 
     @DeleteMapping("{id}")
@@ -74,13 +73,13 @@ public class AccountController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("{accountId}/{personId}")
+    @PostMapping("{accountId}/accountHolders/{personId}")
     public ResponseEntity<AccountDTO> addAccountHolder(@PathVariable long accountId, @PathVariable long personId) {
         accountHolderService.addAccountHolder(accountId, personId);
         return ResponseEntity.ok(mapper.toDto(service.getAccount(accountId)));
     }
 
-    @DeleteMapping("{accountId}/{personId}")
+    @DeleteMapping("{accountId}/accountHolders/{personId}")
     public ResponseEntity<AccountDTO> removeAccountHolder(@PathVariable long accountId, @PathVariable long personId) {
         accountHolderService.removeAccountHolder(accountId, personId);
         return ResponseEntity.ok(mapper.toDto(service.getAccount(accountId)));
