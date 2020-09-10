@@ -12,7 +12,7 @@ import static org.mockserver.model.HttpResponse.response;
 
 public class DummyApiServiceTest {
     private void createDummyApiMock() {
-        new MockServerClient("http://dummy.restapiexample.com", 1080)
+        new MockServerClient("dummy.restapiexample.com", 1080)
             .when(
                 request()
                     .withMethod("GET")
