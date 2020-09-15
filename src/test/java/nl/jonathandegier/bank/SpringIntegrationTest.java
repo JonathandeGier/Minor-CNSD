@@ -1,21 +1,24 @@
 package nl.jonathandegier.bank;
 
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Map;
 
-@ContextConfiguration(classes = Main.class)
-//@WebAppConfiguration
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql("accounts.sql")
+@ContextConfiguration(classes = Main.class, loader = SpringBootContextLoader.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Main.class)
 public class SpringIntegrationTest {
     @Autowired
     protected RestTemplate restTemplate;
