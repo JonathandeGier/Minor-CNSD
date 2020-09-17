@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+    cddb_mysql:
+        container_name: cddb_mysql
+        image: mysql:5.6
+        ports:
+          - "23306:3306"
+        volumes:
+          - "database-content:/var/lib/mysql"
+        
+        environment:
+            MYSQL_ROOT_PASSWORD: quintor_pw
+            MYSQL_DATABASE: cddb_quintor
+            MYSQL_USER: cddb_quintor
+            MYSQL_PASSWORD: quintor_pw
+    
+    cddb_backend:
+        container_name: cddb_backend
+        build:
+            context: .
+            dockerfile: backend-Dockerfile
+        depends_on:
+          - cddb_mysql
+        links:
+          - "cddb_mysql:mysql"
+        ports:
+          - "28080:8080"
+    
+    cddb_frontend:
+        container_name: cddb_frontend
+        build:
+            context: .
+            dockerfile: frontend-Dockerfile
+        depends_on:
+          - cddb_backend
+        links:
+          - "cddb_backend"
+        ports:
+          - "20081:80"
+volumes:
+    database-content:

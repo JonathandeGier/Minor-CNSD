@@ -1,0 +1,4 @@
+FROM nginx
+
+COPY frontend/src /usr/share/nginx/html
+COPY frontend/resources/nginx.conf /etc/nginx
