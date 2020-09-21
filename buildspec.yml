@@ -12,7 +12,3 @@ phases:
     commands:
       - echo Build completed on `date`
       - mvn package
-
-artifacts:
-  files:
-    - target/bank-1.0-SNAPSHOT.jar
