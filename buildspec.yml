@@ -1,6 +1,9 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      java: corretto14
   build:
     commands:
       - echo Build started on `date`
@@ -12,5 +15,4 @@ phases:
 
 artifacts:
   files:
-    - target/*.jar
-    - site/
+    - target/bank-1.0-SNAPSHOT.jar
