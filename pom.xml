@@ -249,6 +249,9 @@
 
                 <configuration>
                     <timestampedReports>false</timestampedReports>
+                    <excludedTestClasses>
+                        <param>nl.jonathandegier.bank.CucumberRunner.java</param>
+                    </excludedTestClasses>
                 </configuration>
 
                 <dependencies>
