@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+  build:
+    commands:
+      - mvn package -Dmaven.test.skip=true
+artifacts:
+  files:
+    - 'bank-1.0-SNAPSHOT.jar'
