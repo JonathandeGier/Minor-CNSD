@@ -6,8 +6,4 @@ phases:
       java: corretto11
   build:
     commands:
-      - echo Mutation Tests started on `date`
       - mvn pitest:mutationCoverage
-  post_build:
-    commands:
-      - echo Mutation Tests completed on `date`
