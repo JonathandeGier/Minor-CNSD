@@ -9,4 +9,4 @@ phases:
       - mvn package -Dmaven.test.skip=true
 artifacts:
   files:
-    - 'bank-1.0-SNAPSHOT.jar'
+    - bank-1.0-SNAPSHOT.jar
