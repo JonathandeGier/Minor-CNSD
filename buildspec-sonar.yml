@@ -4,7 +4,9 @@ phases:
   install:
     runtime-versions:
       java: corretto11
+  pre_build:
+    commands:
+      - mvn verify
   build:
     commands:
-      - mvn compile
       - mvn sonar:sonar -Dsonar.projectKey=cnsd08-backend -Dsonar.host.url=https://sonarqube.cloud-native-minor.it -Dsonar.login=$SONAR_TOKEN
