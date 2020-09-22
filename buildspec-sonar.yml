@@ -7,7 +7,3 @@ phases:
   build:
     commands:
       - mvn sonar:sonar -Dsonar.projectKey=cnsd08-backend -Dsonar.host.url=https://sonarqube.cloud-native-minor.it -Dsonar.login=$SONAR_TOKEN
-artifacts:
-  files:
-    - '**/*'
-  base-directory: 'target'
