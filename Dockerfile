@@ -1,5 +1,3 @@
-MAINTAINER Jonathan de Gier
-
 # make jar
 FROM maven:3.6.3-jdk-11 AS build
 COPY src /usr/src/app/src
