@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Jonathan de Gier - Bank</title>
+
+    <link rel="stylesheet" href="../style/main.css">
+
+    <!-- Bootstrap Styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- fa icons -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Jonathan de Gier - Bank</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.html"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><i class="fa fa-info"></i> Klantgegevens</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="register.html"><i class="fa fa-user-edit"></i> Registreren</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html"><i class="fa fa-user"></i> Aanmelden</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="page-content">
+        <div class="card mx-auto">
+            <div class="card-header">Gegevens over {klant}</div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="initials">Voorletters</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="initials" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="surname">Achternaam</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="surname" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="street">Straat</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="street" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="house_number">Huisnummer</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="house_number" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="city">Plaats</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="city" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="zipcode">Postcode</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="zipcode" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="bsn">BSN</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="bsn" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="birthdate">Geboortedatum</label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" id="birthdate" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="phone_number">Telefoon nummer</label>
+                        <div class="col-sm-3">
+                            <input type="tel" class="form-control" id="phone_number" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="email">E-mail</label>
+                        <div class="col-sm-6">
+                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Opslaan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>
