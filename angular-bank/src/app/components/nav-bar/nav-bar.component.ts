@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,33 +9,45 @@ import {Router} from '@angular/router';
 })
 export class NavBarComponent implements OnInit {
 
-  public routes = {
-    public: [
+  public routes = [
+    {
+      route: '/',
+      label: 'Home',
+      icon: 'fa fa-home',
+      visible: true,
+    }
+  ];
+
+  constructor(private loginService: LoginService, private router: Router) {
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        this.initializeRoutes();
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.initializeRoutes();
+  }
+
+  private initializeRoutes(): void {
+    this.routes = [
       {
         route: '/',
         label: 'Home',
         icon: 'fa fa-home',
+        visible: true,
       },
-    ],
-    login: [
       {
         route: '/details',
         label: 'Klantgegevens',
         icon: 'fa fa-info',
+        visible: this.isLoggedIn(),
       },
-    ],
-  };
-
-  public isLoggedInAttr = false;
-
-  constructor(private loginService: LoginService, private router: Router) { }
-
-  ngOnInit(): void {
-
+    ];
   }
 
   isLoggedIn(): boolean {
-    this.isLoggedInAttr = this.loginService.isLoggedIn();
     return this.loginService.isLoggedIn();
   }
 

@@ -6,13 +6,8 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <div *ngFor="let route of routes.public">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="{{ route.route }}"><i class="{{ route.icon }}"></i> {{ route.label }}</a>
-        </li>
-      </div>
-      <div *ngFor="let route of routes.login">
-        <li class="nav-item" *ngIf="isLoggedIn()">
+      <div *ngFor="let route of routes">
+        <li class="nav-item" *ngIf="route.visible">
           <a class="nav-link" routerLink="{{ route.route }}"><i class="{{ route.icon }}"></i> {{ route.label }}</a>
         </li>
       </div>
