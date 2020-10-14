@@ -28,6 +28,13 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-aws-messaging</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>amazon-sqs-java-extended-client-lib</artifactId>
+			<version>1.2.0</version>
+			<type>jar</type>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>

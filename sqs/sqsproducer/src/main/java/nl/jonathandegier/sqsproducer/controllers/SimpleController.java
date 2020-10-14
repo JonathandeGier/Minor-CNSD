@@ -1,24 +1,28 @@
 package nl.jonathandegier.sqsproducer.controllers;
 
+import com.amazonaws.services.sqs.AmazonSQS;
 import lombok.AllArgsConstructor;
-import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Base64;
+
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("queue")
+@RequestMapping()
 public class SimpleController {
 
-    private static final String QUEUE = "first-queue";
-    private final QueueMessagingTemplate queue;
+    private static final String QUEUE = "file-queue";
 
-    @PostMapping
-    public ResponseEntity<String> addToQueue(@RequestBody String body) {
-        queue.convertAndSend(QUEUE, body);
-        return ResponseEntity.ok("Send message to " + QUEUE + " with body:\n" + body);
+    private final AmazonSQS queue;
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> addFileToQueue(@RequestParam("file") MultipartFile file) throws Exception {
+        String content = Base64.getEncoder().encodeToString(file.getBytes());
+        System.out.println("Sending ...");
+        queue.sendMessage(QUEUE, content);
+        return ResponseEntity.ok("Send message to " + QUEUE);
     }
 }
