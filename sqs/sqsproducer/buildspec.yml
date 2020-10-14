@@ -10,6 +10,7 @@ phases:
       - $(aws ecr get-login --no-include-email --region $REGION)
   build:
     commands:
+      - cd sqs/sqsproducer
       - pwd
       - mvn package
       - echo Building the Docker image...
