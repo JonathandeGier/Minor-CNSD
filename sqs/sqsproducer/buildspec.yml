@@ -23,4 +23,6 @@ phases:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER
       - printf '[{"name":"$CONTAINER_NAME","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
 artifacts:
+  base-directory: sqs/sqsproducer
+  discard-paths: yes
   files: imagedefinitions.json
