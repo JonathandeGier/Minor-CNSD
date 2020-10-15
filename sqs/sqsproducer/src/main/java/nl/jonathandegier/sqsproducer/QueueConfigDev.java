@@ -8,14 +8,14 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 
 @Configuration
 @PropertySource(value = "classpath:/secrets.properties")
-public class QueueConfig {
+@Profile("dev")
+public class QueueConfigDev {
     @Value("${aws_access_key_id}")
     private String accessKey;
 
@@ -25,7 +25,7 @@ public class QueueConfig {
     @Value("${aws_session_token}")
     private String sessionToken;
 
-    @Value("${s3-bucket-name}")
+    @Value("${s3-queue-bucket-name}")
     private String bucketName;
 
 
