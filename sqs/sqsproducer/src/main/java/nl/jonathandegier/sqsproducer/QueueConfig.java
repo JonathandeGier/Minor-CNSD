@@ -15,7 +15,6 @@ import org.springframework.context.annotation.*;
 
 @Configuration
 @PropertySource(value = "classpath:/secrets.properties")
-@Profile("dev")
 public class QueueConfig {
     @Value("${aws_access_key_id}")
     private String accessKey;
