@@ -23,4 +23,4 @@ phases:
 
 artifacts:
   base-directory: sam-app/.aws-sam
-  files: "*/**"
+  files: "**/*"
