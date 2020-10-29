@@ -10,6 +10,13 @@ phases:
   build:
     commands:
       - sam build
+      - pwd
+      - ls
+  post_build:
+    commands:
+      - cd build
+      - pwd
+      - ls
 
 artifacts:
   base-directory: sam-app/.aws-sam
