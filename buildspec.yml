@@ -10,6 +10,7 @@ phases:
   build:
     commands:
       - sam build
+
 artifacts:
-  basedir: sam-app/.aws-sam
+  base-directory: sam-app/.aws-sam
   files: "*/**"
