@@ -17,6 +17,9 @@ phases:
       - cd .aws-sam
       - pwd
       - ls
+      - cd build
+      - pwd
+      - ls
 
 artifacts:
   base-directory: sam-app/.aws-sam
