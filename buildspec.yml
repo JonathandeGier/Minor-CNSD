@@ -14,7 +14,7 @@ phases:
       - ls
   post_build:
     commands:
-      - cd build
+      - cd .aws-sam
       - pwd
       - ls
 
