@@ -11,5 +11,5 @@ phases:
     commands:
 #      - sam deploy --template-file sam-app/package.yaml --stack-name sam-app --capabilities CAPABILITY_IAM
       - cd sam-app
-      - sam deploy
+      - yes | sam deploy
 
