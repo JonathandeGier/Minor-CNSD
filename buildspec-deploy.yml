@@ -4,12 +4,8 @@ phases:
   install:
     runtime-versions:
       python: 3.8
-  pre_build:
-    commands:
-#      - sam package --template-file sam-app/template.yaml --output-template-file sam-app/package.yaml --s3-bucket cnsd-sam-bucket
   build:
     commands:
-#      - sam deploy --template-file sam-app/package.yaml --stack-name sam-app --capabilities CAPABILITY_IAM
       - cd sam-app
       - yes | sam deploy
 
