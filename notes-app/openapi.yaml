@@ -21,6 +21,11 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/GetNoteListSuccess'
+#      x-amazon-apigateway-integration:
+#        httpMethod: post
+#        type: aws_proxy
+#        uri:
+#          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetAllNotesFunction.Arn}/invocations
 
     post:
       summary: Add a new pet to the store
@@ -34,6 +39,11 @@ paths:
           $ref: '#/components/responses/GetNoteSuccess'
         400:
           $ref: '#/components/responses/BadRequestResponse'
+#      x-amazon-apigateway-integration:
+#        httpMethod: post
+#        type: aws_proxy
+#        uri:
+#          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateNoteFunction.Arn}/invocations
 
   /notes/{NoteId}:
     get:
@@ -50,6 +60,11 @@ paths:
           $ref: '#/components/responses/BadRequestResponse'
         404:
           $ref: '#/components/responses/NotFoundResponse'
+#      x-amazon-apigateway-integration:
+#        httpMethod: post
+#        type: aws_proxy
+#        uri:
+#          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetNoteFunction.Arn}/invocations
 
     delete:
       summary: Delete a note
@@ -65,6 +80,11 @@ paths:
           $ref: '#/components/responses/BadRequestResponse'
         404:
           $ref: '#/components/responses/NotFoundResponse'
+#      x-amazon-apigateway-integration:
+#        httpMethod: post
+#        type: aws_proxy
+#        uri:
+#          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteNoteFunction.Arn}/invocations
 
 
 components:
