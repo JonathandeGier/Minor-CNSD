@@ -30,13 +30,18 @@ cur.execute(
 
 
 def lambda_handler(event, context):
-    id = event['params']['path']['id']
+    id = event['pathParameters']['NoteId']
     cur.execute("execute prepare_get (%s)", id)
+    # cur.execute("SELECT * FROM notes;")
 
     result = cur.fetchall()
 
     if len(result) != 1:
-        raise Exception('Not Found')
+        message = {"message": "Note with id {} not found".format((id))}
+        return {
+            "statusCode": 404,
+            "body": json.dumps(message)
+        }
 
     note = {
         "id": result[0][0],
@@ -46,6 +51,6 @@ def lambda_handler(event, context):
     }
 
     return {
-        'statusCode': 200,
-        'body': note
+        "statusCode": 200,
+        "body": json.dumps(note)
     }

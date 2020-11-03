@@ -43,4 +43,7 @@ def lambda_handler(event, context):
         }
         notes.append(note)
 
-    return notes
+    return {
+        "statusCode": 200,
+        "body": json.dumps(notes)
+    }

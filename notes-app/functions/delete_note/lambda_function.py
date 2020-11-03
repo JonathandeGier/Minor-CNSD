@@ -30,6 +30,10 @@ cur.execute(
 
 
 def lambda_handler(event, context):
-    id = event['params']['path']['id']
+    id = event['pathParameters']['NoteId']
     cur.execute("execute prepare_delete_note (%s)", [id])
     conn.commit()
+
+    return {
+        "statusCode": 200,
+    }

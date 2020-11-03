@@ -34,7 +34,8 @@ cur.execute(
 
 
 def lambda_handler(event, context):
-    text = event['body-json']['text']
+    body = json.loads(event['body'])
+    text = body['text']
 
     cur.execute("select nextval('notes_id')")
     id = cur.fetchall()[0][0]
@@ -43,6 +44,7 @@ def lambda_handler(event, context):
 
     cur.execute("execute prepare_get_note (%s)", [id])
     result = cur.fetchall()
+    conn.commit()
 
     note = {
         "Id": result[0][0],
@@ -51,4 +53,7 @@ def lambda_handler(event, context):
         "Updated_at": result[0][3].strftime('%Y-%m-%d %H:%M:%S:%f')
     }
 
-    return note
+    return {
+        "statusCode": 200,
+        "body": json.dumps(note)
+    }
