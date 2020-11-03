@@ -17,12 +17,16 @@ Globals:
     Timeout: 3
 
 Resources:
-#  #################### API ####################
-#  NotesApiGateway:
-#    Type: AWS::Serverless::Api
-#    Properties:
-#      StageName: live
-#      DefinitionUri: openapi.yaml
+  #################### API ####################
+  NotesApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: live
+      DefinitionBody:
+        'Fn::Transform':
+          Name: 'AWS::Include'
+          Parameters:
+            Location: openapi.yaml
 
   #################### Lambda Functions ####################
   GetAllNotesFunction:
@@ -38,8 +42,8 @@ Resources:
         NotesApi:
           Type: Api
           Properties:
-#            RestApiId:
-#              Ref: NotesApiGateway
+            RestApiId:
+              Ref: NotesApiGateway
             Path: /notes
             Method: get
 
@@ -56,8 +60,8 @@ Resources:
         NotesApi:
           Type: Api
           Properties:
-#            RestApiId:
-#              Ref: NotesApiGateway
+            RestApiId:
+              Ref: NotesApiGateway
             Path: /notes/{id}
             Method: get
 
@@ -74,8 +78,8 @@ Resources:
         NotesApi:
           Type: Api
           Properties:
-#            RestApiId:
-#              Ref: NotesApiGateway
+            RestApiId:
+              Ref: NotesApiGateway
             Path: /notes
             Method: post
 
@@ -92,8 +96,8 @@ Resources:
         NotesApi:
           Type: Api
           Properties:
-#            RestApiId:
-#              Ref: NotesApiGateway
+            RestApiId:
+              Ref: NotesApiGateway
             Path: /notes/{id}
             Method: delete
 
@@ -104,4 +108,4 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   NotesApi:
     Description: "API Gateway endpoint URL for Prod stage for Notes"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Value: !Sub "https://${NotesApiGateway}.execute-api.${AWS::Region}.amazonaws.com/live/"
