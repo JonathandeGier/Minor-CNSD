@@ -1,47 +1,26 @@
 import json
 import boto3
-import psycopg2
 import os
 
-db_identifier = 'notes'
-client = boto3.client('rds')
 
-instances = client.describe_db_instances(DBInstanceIdentifier=db_identifier)
-instance = instances['DBInstances'][0]
-
-user = instance['MasterUsername']
-password = os.environ['DB_PASSWORD']
-host = instance['Endpoint']['Address']
-port = instance['Endpoint']['Port']
-
-conn = psycopg2.connect(
-    database=db_identifier,
-    user=user,
-    password=password,
-    host=host,
-    port=port
-)
-
-cur = conn.cursor()
+table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
 
 
 def lambda_handler(event, context):
-    cur.execute('''
-            SELECT *
-            FROM notes;
-            ''')
-
-    result = cur.fetchall()
+    scan_kwargs = {
+        'ProjectionExpression': "id, content, created_at, updated_at"
+    }
 
     notes = []
-    for databaseNote in result:
-        note = {
-            "Id": databaseNote[0],
-            "Text": databaseNote[1],
-            "Created_at": databaseNote[2].strftime('%Y-%m-%d %H:%M:%S:%f'),
-            "Updated_at": databaseNote[3].strftime('%Y-%m-%d %H:%M:%S:%f')
-        }
-        notes.append(note)
+    done = False
+    start_key = None
+    while not done:
+        if start_key:
+            scan_kwargs['ExclusiveStartKey'] = start_key
+        response = table.scan(**scan_kwargs)
+        notes.extend(response.get('Items', []))
+        start_key = response.get('LastEvaluatedKey', None)
+        done = start_key is None
 
     return {
         "statusCode": 200,

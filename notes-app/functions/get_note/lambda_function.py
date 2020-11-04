@@ -1,56 +1,28 @@
 import json
 import boto3
-import psycopg2
 import os
+from botocore.exceptions import ClientError
 
-db_identifier = 'notes'
-client = boto3.client('rds')
-
-instances = client.describe_db_instances(DBInstanceIdentifier=db_identifier)
-instance = instances['DBInstances'][0]
-
-user = instance['MasterUsername']
-password = os.environ['DB_PASSWORD']
-host = instance['Endpoint']['Address']
-port = instance['Endpoint']['Port']
-
-conn = psycopg2.connect(
-    database=db_identifier,
-    user=user,
-    password=password,
-    host=host,
-    port=port
-)
-
-cur = conn.cursor()
-cur.execute(
-    "prepare prepare_get as "
-    "select * from notes where id = $1"
-)
+table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
 
 
 def lambda_handler(event, context):
     id = event['pathParameters']['NoteId']
-    cur.execute("execute prepare_get (%s)", id)
-    # cur.execute("SELECT * FROM notes;")
 
-    result = cur.fetchall()
-
-    if len(result) != 1:
-        message = {"message": "Note with id {} not found".format((id))}
+    try:
+        response = table.get_item(Key={'id': id})
+        if "Item" in response:
+            return {
+                "statusCode": 200,
+                "body": json.dumps(response['Item'])
+            }
+        else:
+            return {
+                "statusCode": 404
+            }
+    except ClientError as e:
+        print(e.response)
         return {
-            "statusCode": 404,
-            "body": json.dumps(message)
+            "statusCode": 500,
+            "body": json.dumps(e.response['Error']['Message'])
         }
-
-    note = {
-        "id": result[0][0],
-        "text": result[0][1],
-        "created_at": result[0][2].strftime('%Y-%m-%d %H:%M:%S:%f'),
-        "updated_at": result[0][3].strftime('%Y-%m-%d %H:%M:%S:%f')
-    }
-
-    return {
-        "statusCode": 200,
-        "body": json.dumps(note)
-    }

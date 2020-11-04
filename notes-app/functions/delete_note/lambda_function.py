@@ -1,39 +1,19 @@
-import json
 import boto3
-import psycopg2
 import os
+from botocore.exceptions import ClientError
 
-db_identifier = 'notes'
-client = boto3.client('rds')
-
-instances = client.describe_db_instances(DBInstanceIdentifier=db_identifier)
-instance = instances['DBInstances'][0]
-
-user = instance['MasterUsername']
-password = os.environ['DB_PASSWORD']
-host = instance['Endpoint']['Address']
-port = instance['Endpoint']['Port']
-
-conn = psycopg2.connect(
-    database=db_identifier,
-    user=user,
-    password=password,
-    host=host,
-    port=port
-)
-
-cur = conn.cursor()
-cur.execute(
-    "prepare prepare_delete_note as "
-    "delete from notes where id = $1"
-)
+table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
 
 
 def lambda_handler(event, context):
     id = event['pathParameters']['NoteId']
-    cur.execute("execute prepare_delete_note (%s)", [id])
-    conn.commit()
 
-    return {
-        "statusCode": 200,
-    }
+    try:
+        response = table.delete_item(Key={ 'id': id })
+        return {
+            "statusCode": 200,
+        }
+    except ClientError as e:
+        return {
+            "statusCode": 404
+        }

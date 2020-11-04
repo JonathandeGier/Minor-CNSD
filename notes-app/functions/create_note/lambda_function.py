@@ -1,57 +1,29 @@
 import json
 import boto3
-import psycopg2
+import datetime
+import uuid
 import os
 
-db_identifier = 'notes'
-client = boto3.client('rds')
-
-instances = client.describe_db_instances(DBInstanceIdentifier=db_identifier)
-instance = instances['DBInstances'][0]
-
-user = instance['MasterUsername']
-password = os.environ['DB_PASSWORD']
-host = instance['Endpoint']['Address']
-port = instance['Endpoint']['Port']
-
-conn = psycopg2.connect(
-    database=db_identifier,
-    user=user,
-    password=password,
-    host=host,
-    port=port
-)
-
-cur = conn.cursor()
-cur.execute(
-    "prepare prepare_create_note as "
-    "insert into notes(id, text, created_at, updated_at) values ($1, $2, now(), now())"
-)
-cur.execute(
-    "prepare prepare_get_note as "
-    "select * from notes where id = $1"
-)
+table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
 
 
 def lambda_handler(event, context):
+
     body = json.loads(event['body'])
     text = body['text']
+    id = str(uuid.uuid4())
 
-    cur.execute("select nextval('notes_id')")
-    id = cur.fetchall()[0][0]
+    table.put_item(
+        Item = {
+            "id": id,
+            "content": text,
+            "created_at": datetime.datetime.utcnow().isoformat(),
+            "updated_at": datetime.datetime.utcnow().isoformat()
+        }
+    )
 
-    cur.execute("execute prepare_create_note (%s, %s)", (id, text))
-
-    cur.execute("execute prepare_get_note (%s)", [id])
-    result = cur.fetchall()
-    conn.commit()
-
-    note = {
-        "Id": result[0][0],
-        "Text": result[0][1],
-        "Created_at": result[0][2].strftime('%Y-%m-%d %H:%M:%S:%f'),
-        "Updated_at": result[0][3].strftime('%Y-%m-%d %H:%M:%S:%f')
-    }
+    response = table.get_item(Key={'id': id})
+    note = response['Item']
 
     return {
         "statusCode": 200,

@@ -5,11 +5,6 @@ Description: >
 
   Sample SAM Template for notes-app
 
-
-Parameters:
-  AwsRdsPassword:
-    Type: String
-
 Globals:
   Function:
     Runtime: python3.8
@@ -34,10 +29,11 @@ Resources:
     Properties:
       CodeUri: functions/get_all_notes/
       Policies:
-        - AmazonRDSFullAccess
+        - DynamoDBCrudPolicy:
+              TableName: !Ref DynamoDBNotesTable
       Environment:
         Variables:
-          DB_PASSWORD: !Sub "${AwsRdsPassword}"
+          TABLENAME: NotesTable
       Events:
         NotesApi:
           Type: Api
@@ -52,10 +48,11 @@ Resources:
     Properties:
       CodeUri: functions/get_note/
       Policies:
-        - AmazonRDSFullAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBNotesTable
       Environment:
         Variables:
-          DB_PASSWORD: !Sub "${AwsRdsPassword}"
+          TABLENAME: NotesTable
       Events:
         NotesApi:
           Type: Api
@@ -70,10 +67,11 @@ Resources:
     Properties:
       CodeUri: functions/create_note/
       Policies:
-        - AmazonRDSFullAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBNotesTable
       Environment:
         Variables:
-          DB_PASSWORD: !Sub "${AwsRdsPassword}"
+          TABLENAME: NotesTable
       Events:
         NotesApi:
           Type: Api
@@ -88,10 +86,11 @@ Resources:
     Properties:
       CodeUri: functions/delete_note/
       Policies:
-        - AmazonRDSFullAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBNotesTable
       Environment:
         Variables:
-          DB_PASSWORD: !Sub "${AwsRdsPassword}"
+          TABLENAME: NotesTable
       Events:
         NotesApi:
           Type: Api
@@ -101,11 +100,17 @@ Resources:
             Path: /notes/{id}
             Method: delete
 
+  #################### DynamoDB Database ####################
+  DynamoDBNotesTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: NotesTable
+      PrimaryKey:
+        Name: id
+        Type: String
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+
   NotesApi:
     Description: "API Gateway endpoint URL for Prod stage for Notes"
     Value: !Sub "https://${NotesApiGateway}.execute-api.${AWS::Region}.amazonaws.com/live/"
