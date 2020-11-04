@@ -10,7 +10,7 @@ table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
 def lambda_handler(event, context):
 
     body = json.loads(event['body'])
-    text = body['text']
+    text = body['content']
     id = str(uuid.uuid4())
 
     table.put_item(

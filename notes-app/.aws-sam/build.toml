@@ -20,3 +20,8 @@ functions = ["CreateNoteFunction"]
 codeuri = "functions/delete_note/"
 runtime = "python3.8"
 functions = ["DeleteNoteFunction"]
+
+[build_definitions.65df9947-39ab-4e7b-a420-569594a71a79]
+codeuri = "functions/edit_note/"
+runtime = "python3.8"
+functions = ["UpdateNoteFunction"]

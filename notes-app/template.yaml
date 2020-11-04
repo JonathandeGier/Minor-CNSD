@@ -59,7 +59,7 @@ Resources:
           Properties:
             RestApiId:
               Ref: NotesApiGateway
-            Path: /notes/{id}
+            Path: /notes/{NoteId}
             Method: get
 
   CreateNoteFunction:
@@ -81,6 +81,25 @@ Resources:
             Path: /notes
             Method: post
 
+  UpdateNoteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/edit_note/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBNotesTable
+      Environment:
+        Variables:
+          TABLENAME: NotesTable
+      Events:
+        NotesApi:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: NotesApiGateway
+            Path: /notes/{NoteId}
+            Method: put
+
   DeleteNoteFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -97,7 +116,7 @@ Resources:
           Properties:
             RestApiId:
               Ref: NotesApiGateway
-            Path: /notes/{id}
+            Path: /notes/{NoteId}
             Method: delete
 
   #################### DynamoDB Database ####################

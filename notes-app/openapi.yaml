@@ -33,7 +33,7 @@ paths:
         - Notes
       operationId: CreateNote
       requestBody:
-        $ref: '#/components/requestBodies/CreateNote'
+        $ref: '#/components/requestBodies/CreateOrUpdateNote'
       responses:
         200:
           $ref: '#/components/responses/GetNoteSuccess'
@@ -66,6 +66,24 @@ paths:
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetNoteFunction.Arn}/invocations
 
+    put:
+      summary: Update a note
+      tags:
+        - Notes
+      operationId: UpdateNote
+      requestBody:
+        $ref: '#/components/requestBodies/CreateOrUpdateNote'
+      responses:
+        200:
+          $ref: '#/components/responses/GetNoteSuccess'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+      x-amazon-apigateway-integration:
+        httpMethod: post
+        type: aws_proxy
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpdateNoteFunction.Arn}/invocations
+
     delete:
       summary: Delete a note
       description: Delete a note
@@ -90,13 +108,13 @@ paths:
 components:
 
   requestBodies:
-    CreateNote:
+    CreateOrUpdateNote:
       description: The note that needs to be added
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CreateNote'
+            $ref: '#/components/schemas/CreateOrUpdateNote'
 
   responses:
     GetNoteListSuccess:
@@ -147,7 +165,7 @@ components:
         id:
           type: integer
           format: int64
-        text:
+        content:
           type: string
         created_at:
           type: string
@@ -156,12 +174,12 @@ components:
           type: string
           format: date-time
 
-    CreateNote:
+    CreateOrUpdateNote:
       type: object
       required:
-        - text
+        - content
       properties:
-        text:
+        content:
           type: string
 
     Error:
