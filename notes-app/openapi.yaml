@@ -18,6 +18,8 @@ paths:
       tags:
         - Notes
       operationId: GetAllNotes
+      parameters:
+        - $ref: '#/components/parameters/Content'
       responses:
         200:
           $ref: '#/components/responses/GetNoteListSuccess'
@@ -106,7 +108,7 @@ paths:
 
 
 components:
-
+  ############## REQUEST BODIES ##############
   requestBodies:
     CreateOrUpdateNote:
       description: The note that needs to be added
@@ -116,6 +118,7 @@ components:
           schema:
             $ref: '#/components/schemas/CreateOrUpdateNote'
 
+  ############## RESPONSES ##############
   responses:
     GetNoteListSuccess:
       description: Success
@@ -147,6 +150,7 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
 
+  ############## PARAMETERS ##############
   parameters:
     NoteId:
       name: NoteId
@@ -154,17 +158,24 @@ components:
       required: true
       description: Identification of a note
       schema:
-        type: integer
-        format: int64
-      example: 532574
+        type: string
+        format: uuid
+    Content:
+      name: content
+      in: query
+      required: false
+      description: Search by exact content
+      schema:
+        type: string
 
+  ############## SCHEMAS ##############
   schemas:
     Note:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         content:
           type: string
         created_at:
