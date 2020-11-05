@@ -119,14 +119,32 @@ Resources:
             Path: /notes/{NoteId}
             Method: delete
 
-  #################### DynamoDB Database ####################
+  #################### DynamoDB Database Table(s) ####################
   DynamoDBNotesTable:
-    Type: AWS::Serverless::SimpleTable
+    Type: AWS::DynamoDB::Table
     Properties:
       TableName: NotesTable
-      PrimaryKey:
-        Name: id
-        Type: String
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: content
+          AttributeType: S
+        - AttributeName: created_at
+          AttributeType: S
+        - AttributeName: updated_at
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: ContentIndex
+          KeySchema:
+            - AttributeName: content
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
 
 Outputs:
 
