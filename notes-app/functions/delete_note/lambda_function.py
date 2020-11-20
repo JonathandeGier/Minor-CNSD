@@ -2,10 +2,10 @@ import boto3
 import os
 from botocore.exceptions import ClientError
 
-table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
-
 
 def lambda_handler(event, context):
+    table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
+
     id = event['pathParameters']['NoteId']
 
     try:

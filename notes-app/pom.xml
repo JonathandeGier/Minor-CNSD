@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>nl.jonthandegier</groupId>
+    <artifactId>simple-notes</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>simple-notes</name>
+
+    <properties>
+        <sonar.sources>functions</sonar.sources>
+		<sonar.projectName>cnsd08-notes</sonar.projectName>
+		<sonar.projectKey>cnsd08-notes</sonar.projectKey>
+		<sonar.host.url>https://sonarqube.cloud-native-minor.it</sonar.host.url>
+		<sonar.login>b096c2720194f920dacbf9daadb760d4af06b1bf</sonar.login>
+        <sonar.tests>tests</sonar.tests>
+        <sonar.python.xunit.reportPath>target/testreport-*.xml</sonar.python.xunit.reportPath>
+        <sonar.python.coverage.reportPaths>target/coverage-*.xml</sonar.python.coverage.reportPaths>
+    </properties>
+
+
+    <dependencies>
+        
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.7.0.1746</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+    </build>
+
+</project>

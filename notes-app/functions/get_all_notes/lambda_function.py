@@ -4,10 +4,7 @@ import os
 from boto3.dynamodb.conditions import Key
 
 
-table = boto3.resource("dynamodb").Table(os.environ["TABLENAME"])
-
-
-def scan_notes():
+def scan_notes(table):
     scan_kwargs = {
         "ProjectionExpression": "id, content, created_at, updated_at"
     }
@@ -26,7 +23,7 @@ def scan_notes():
     return notes
 
 
-def query_notes_by_content(content):
+def query_notes_by_content(table, content):
     response = table.query(
         IndexName="ContentIndex",
         KeyConditionExpression=Key("content").eq(content)
@@ -35,12 +32,14 @@ def query_notes_by_content(content):
 
 
 def lambda_handler(event, context):
+    table = boto3.resource("dynamodb").Table(os.environ["TABLENAME"])
+
     queryParameters = event["queryStringParameters"]
     
     if "content" in queryParameters:
-        notes = query_notes_by_content(queryParameters["content"])
+        notes = query_notes_by_content(table, queryParameters["content"])
     else:
-        notes = scan_notes()
+        notes = scan_notes(table)
     
     return {
         "statusCode": 200,

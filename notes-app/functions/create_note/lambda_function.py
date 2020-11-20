@@ -4,10 +4,9 @@ import datetime
 import uuid
 import os
 
-table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
-
 
 def lambda_handler(event, context):
+    table = boto3.resource('dynamodb').Table(os.environ['TABLENAME'])
 
     body = json.loads(event['body'])
     text = body['content']
