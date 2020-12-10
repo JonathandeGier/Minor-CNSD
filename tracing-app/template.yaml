@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  tracing-app
+
+  Sample SAM Template for tracing-app
+
+
+Globals:
+  Function:
+    Timeout: 3
+    Handler: app.lambda_handler
+    Runtime: python3.8
+    Tracing: Active
+  Api:
+    TracingEnabled: true
+
+Resources:
+  ProducerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/queue_producer/
+      Environment:
+        Variables:
+          QUEUE_URL: !Ref SQSQueue
+      Policies:
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt SQSQueue.QueueName
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /produce
+            Method: post
+
+  ListenerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/queue_listener/
+      Policies:
+        - SQSPollerPolicy:
+            QueueName: !GetAtt SQSQueue.QueueName
+      Events:
+        Api:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt SQSQueue.Arn
+
+  SQSQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: TracingQueue
+
+
+Outputs:
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"

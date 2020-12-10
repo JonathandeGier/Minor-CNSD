@@ -1,0 +1,28 @@
+spring:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true
+
+management:
+  metrics:
+    export:
+      cloudwatch:
+        namespace: SampleApp
+        batchSize: 20
+
+com:
+  amazonaws:
+    sdk:
+      disableEc2Metadata: false
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      auto: false
+      static: us-east-1
